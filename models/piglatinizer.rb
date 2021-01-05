@@ -1,27 +1,27 @@
 class PigLatinizer
 
-def piglatinize(word)
-
-  non_pig_latin_words = ["i", "me", "to", "too", "a", "an", "in", "and", "on"]
-  vowels = ["a", "e", "i", "o", "u"]
-
-  if non_pig_latin_words.include?(word)
-    word
-  elsif vowels.include? word[0]
-    word << "ay"
-  else
-    consonants = ""
-    while !vowels.include?(word[0])
-      consonants << word[0]
-      word = word.split("")[1..-1].join
+  def piglatinize(word)
+    return word if %w[and an in].include?(word) #one syllable exceptions
+    letters = word.split("")
+    letters.keep_if {|letter| letter != "."}
+    if letters.size > 1
+      until vowel?(letters[0])
+        letters << letters.shift
+      end
+      letters  << "ay"
     end
-    word + consonants + 'ay'
+    letters.join
   end
-end
 
+  def to_pig_latin(text)
+    words = text.split(" ")
+    words.map! {|word| piglatinize(word)}
+    words.join(" ")
+  end
 
-def to_pig_latin(string)
-  string.split.collect{|word| piglatinize(word)}.join(" ")
-end
+  def vowel?(letter)
+    letter.downcase
+    letter == "o" || letter == "e" || letter == "a" || letter == "i" || letter == "u"
+  end
 
-end
+end 
