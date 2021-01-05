@@ -26,3 +26,6 @@ def to_pig_latin(string)
 end
 
 end
+p = PigLatinizer.new
+
+puts p.piglatinize("pork")
